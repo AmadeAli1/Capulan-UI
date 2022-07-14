@@ -1,5 +1,7 @@
 package screens
 
+import `object`.Account
+import `object`.MessageValidation
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -17,10 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import theme.backgroundChild
@@ -30,9 +35,8 @@ import java.awt.Cursor
 @OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
-fun LoginScreen() {
+fun LoginScreen(login: Account = Account()) {
     val focus = LocalFocusManager.current
-
     Box(
         modifier = Modifier.fillMaxSize().background(color = backgroundParent),
     ) {
@@ -58,14 +62,16 @@ fun LoginScreen() {
                         letterSpacing = 1.sp, fontSize = 27.sp
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    CodigoInput { codigo ->
 
+                    CodigoInput(login.codigoValidationMessage) { codigo ->
+                        login.addCodigo(codigo)
                     }
-                    PasswordInput { senha ->
 
+                    PasswordInput(login.passwordValidationMessage) { senha ->
+                        login.addPassword(senha)
                     }
                     ButtonLogin {
-
+                        login.login()
                     }
                 }
             }
@@ -73,8 +79,9 @@ fun LoginScreen() {
     }
 }
 
+
 @Composable
-private fun CodigoInput(onValueChange: (String) -> Unit) {
+private fun CodigoInput(validation: MessageValidation, onValueChange: (String) -> Unit) {
     var code by remember { mutableStateOf("") }
     val clearText = derivedStateOf {
         code.isNotBlank()
@@ -85,6 +92,7 @@ private fun CodigoInput(onValueChange: (String) -> Unit) {
             code = value
             onValueChange(value)
         },
+        colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
         modifier = Modifier.width(310.dp),
         label = { Text(text = "Codigo") },
         trailingIcon = {
@@ -100,11 +108,12 @@ private fun CodigoInput(onValueChange: (String) -> Unit) {
                 }
             }
         },
+        isError = !validation.status
     )
 }
 
 @Composable
-private fun PasswordInput(onValueChange: (String) -> Unit) {
+private fun PasswordInput(validation: MessageValidation, onValueChange: (String) -> Unit) {
     var senha by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
 
@@ -115,7 +124,9 @@ private fun PasswordInput(onValueChange: (String) -> Unit) {
         onValueChange = { value ->
             senha = value
             onValueChange(value)
-        }, modifier = Modifier.width(310.dp),
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
+        modifier = Modifier.width(310.dp),
         label = { Text(text = "Senha") },
         trailingIcon = {
             IconButton(
@@ -128,23 +139,37 @@ private fun PasswordInput(onValueChange: (String) -> Unit) {
                 Icon(imageVector = iconEyes, null)
             }
         },
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation()
+        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+        isError = !validation.status
     )
 }
 
 @Composable
-private fun ButtonLogin(onClick: () -> Unit) {
+private fun ButtonLogin(function: () -> Unit) {
+
     OutlinedButton(
-        onClick = onClick, modifier = Modifier.width(310.dp)
+        onClick = {
+//            function()
+            function.invoke()
+        }, modifier = Modifier.width(310.dp)
             .pointerHoverIcon(
                 icon = PointerIcon(
                     Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
                 )
-            )
+            ),
+        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundParent)
     ) {
-        Text("Entrar")
+        Text(
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(color = backgroundChild)) {
+                    append("Entrar")
+                }
+            }
+        )
+
     }
 }
+
 
 @Composable
 private fun meuLoginJose() {
