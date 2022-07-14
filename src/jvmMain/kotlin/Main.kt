@@ -20,7 +20,7 @@ fun App() {
 }
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication, resizable = false, state = WindowState(placement = WindowPlacement.Maximized)) {
+    Window(onCloseRequest = ::exitApplication, resizable = false, state = WindowState(placement = WindowPlacement.Floating)) {
         App()
     }
 }
