@@ -1,5 +1,6 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -28,6 +29,7 @@ kotlin {
                 implementation("org.jetbrains.compose.material:material-icons-extended-desktop:1.0.0")
                 implementation("com.squareup.retrofit2:retrofit:2.9.0")
                 implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+                implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
             }
 
         }

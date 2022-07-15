@@ -1,5 +1,6 @@
 package screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -26,7 +27,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import `object`.Account
+import kotlinx.coroutines.launch
+import model.validation.UserViewModel
+import navigation.Screen
 import theme.backgroundChild
 import theme.backgroundParent
 import java.awt.Cursor
@@ -34,10 +37,13 @@ import java.awt.Cursor
 @OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
-fun LoginScreen(login: Account = Account()) {
+fun LoginScreen(viewModel: UserViewModel = UserViewModel(), navigate: MutableState<Screen>) {
     val focus = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    val progress by remember { viewModel.progress }
+
     Box(
-        modifier = Modifier.fillMaxSize().background(color = backgroundParent),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -46,7 +52,7 @@ fun LoginScreen(login: Account = Account()) {
                 focus.clearFocus()
             }
         ) {
-            Card(backgroundColor = backgroundChild.copy(alpha = 0.6f)) {
+            Card(elevation = 2.dp) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -56,21 +62,32 @@ fun LoginScreen(login: Account = Account()) {
                         text = "Supreme Capulan",
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.colors.background,
+                        color = MaterialTheme.colors.onBackground,
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 1.sp, fontSize = 27.sp
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    CodigoInput(login.codigoValidationMessage) { codigo ->
-                        login.addCodigo(codigo)
+                    CodigoInput(viewModel.codigoValidationMessage) { codigo ->
+                        viewModel.addCodigo(codigo)
                     }
 
-                    PasswordInput(login.passwordValidationMessage) { senha ->
-                        login.addPassword(senha)
+                    PasswordInput(viewModel.passwordValidationMessage) { senha ->
+                        viewModel.addPassword(senha)
                     }
                     ButtonLogin {
-                        login.login()
+                        scope.launch {
+                            viewModel.login()
+                        }
+                    }
+                    AnimatedVisibility(progress.status) {
+                        CircularProgressIndicator()
+                    }
+
+                    LaunchedEffect(key1 = progress.result) {
+                        if (progress.result) {
+                            navigate.value = Screen.MENU
+                        }
                     }
                 }
             }
@@ -80,68 +97,95 @@ fun LoginScreen(login: Account = Account()) {
 
 
 @Composable
-private fun CodigoInput(validation: Account.MessageValidation, onValueChange: (String) -> Unit) {
+private fun CodigoInput(validation: UserViewModel.MessageValidation, onValueChange: (String) -> Unit) {
     var code by remember { mutableStateOf("") }
+
     val clearText = derivedStateOf {
         code.isNotBlank()
     }.value
-    OutlinedTextField(
-        value = code,
-        onValueChange = { value ->
-            code = value
-            onValueChange(value)
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
-        modifier = Modifier.width(310.dp),
-        label = { Text(text = "Codigo") },
-        trailingIcon = {
-            if (clearText) {
-                IconButton(
-                    onClick = { code = "" }, modifier = Modifier.pointerHoverIcon(
-                        icon = PointerIcon(
-                            Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+    Column {
+        OutlinedTextField(
+            value = code,
+            onValueChange = { value ->
+                code = value
+                onValueChange(value)
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
+            modifier = Modifier.width(310.dp),
+            label = { Text(text = "Codigo") },
+            trailingIcon = {
+                if (clearText) {
+                    IconButton(
+                        onClick = { code = "" }, modifier = Modifier.pointerHoverIcon(
+                            icon = PointerIcon(
+                                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+                            )
                         )
-                    )
-                ) {
-                    Icon(imageVector = Icons.Default.Clear, null)
+                    ) {
+                        Icon(imageVector = Icons.Default.Clear, null)
+                    }
                 }
-            }
-        },
-        isError = !validation.status
-    )
+            },
+            isError = !validation.status
+        )
+
+        Spacer(modifier = Modifier.height(1.dp))
+        if (!validation.status) {
+            Text(
+                text = validation.mensagem,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.error
+            )
+        }
+    }
+
 }
 
 @Composable
-private fun PasswordInput(validation: Account.MessageValidation, onValueChange: (String) -> Unit) {
+private fun PasswordInput(validation: UserViewModel.MessageValidation, onValueChange: (String) -> Unit) {
     var senha by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
 
     val iconEyes = if (showPassword) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff
 
-    OutlinedTextField(
-        value = senha,
-        onValueChange = { value ->
-            senha = value
-            onValueChange(value)
-        },
-        colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
-        modifier = Modifier.width(310.dp),
-        label = { Text(text = "Senha") },
-        trailingIcon = {
-            IconButton(
-                onClick = { showPassword = !showPassword }, modifier = Modifier.pointerHoverIcon(
-                    icon = PointerIcon(
-                        Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+    Column {
+        OutlinedTextField(
+            value = senha,
+            onValueChange = { value ->
+                senha = value
+                onValueChange(value)
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = backgroundParent),
+            modifier = Modifier.width(310.dp),
+            label = { Text(text = "Senha") },
+            trailingIcon = {
+                IconButton(
+                    onClick = { showPassword = !showPassword }, modifier = Modifier.pointerHoverIcon(
+                        icon = PointerIcon(
+                            Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+                        )
                     )
-                )
-            ) {
-                Icon(imageVector = iconEyes, null)
-            }
-        },
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-        isError = !validation.status
-    )
+                ) {
+                    Icon(imageVector = iconEyes, null)
+                }
+            },
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            isError = !validation.status
+        )
+        Spacer(modifier = Modifier.height(1.dp))
+        if (!validation.status) {
+            Text(
+                text = validation.mensagem,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.error
+            )
+        }
+    }
 }
+
 
 @Composable
 private fun ButtonLogin(function: () -> Unit) {
@@ -226,4 +270,3 @@ private fun BoxJose() {
 
     }
 }
-
