@@ -1,7 +1,5 @@
 package screens
 
-import `object`.Account
-import `object`.MessageValidation
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -28,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import `object`.Account
 import theme.backgroundChild
 import theme.backgroundParent
 import java.awt.Cursor
@@ -81,7 +80,7 @@ fun LoginScreen(login: Account = Account()) {
 
 
 @Composable
-private fun CodigoInput(validation: MessageValidation, onValueChange: (String) -> Unit) {
+private fun CodigoInput(validation: Account.MessageValidation, onValueChange: (String) -> Unit) {
     var code by remember { mutableStateOf("") }
     val clearText = derivedStateOf {
         code.isNotBlank()
@@ -113,7 +112,7 @@ private fun CodigoInput(validation: MessageValidation, onValueChange: (String) -
 }
 
 @Composable
-private fun PasswordInput(validation: MessageValidation, onValueChange: (String) -> Unit) {
+private fun PasswordInput(validation: Account.MessageValidation, onValueChange: (String) -> Unit) {
     var senha by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
 
@@ -149,8 +148,7 @@ private fun ButtonLogin(function: () -> Unit) {
 
     OutlinedButton(
         onClick = {
-//            function()
-            function.invoke()
+            function()
         }, modifier = Modifier.width(310.dp)
             .pointerHoverIcon(
                 icon = PointerIcon(
