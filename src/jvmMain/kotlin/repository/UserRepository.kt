@@ -3,12 +3,11 @@ package repository
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import service.Singleton.SERVIDOR
 import service.UserService
-import service.singleton.SERVIDOR
 
-class UserRepository(
+object UserRepository {
     private val service: UserService = SERVIDOR.create(UserService::class.java)
-) {
     var currentUser by mutableStateOf<Any?>(null)
         private set
 

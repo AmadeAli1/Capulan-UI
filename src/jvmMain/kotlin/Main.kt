@@ -4,32 +4,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.*
 import navigation.Navigation
 import navigation.Screen
 
-@Composable
-fun App() {
-    val darkMode = isSystemInDarkTheme()
-    MaterialTheme(colors = if (darkMode) darkColors() else lightColors()) {
-        Surface(color = MaterialTheme.colors.background) {
-            Navigation(Screen.LOGIN)
-        }
-    }
-}
-
 fun main() = application {
     Window(
-        onCloseRequest = ::exitApplication, resizable = false, state = WindowState(
+        onCloseRequest = ::exitApplication,
+        resizable = false,
+        state = WindowState(
             placement = WindowPlacement.Maximized,
-            position = WindowPosition(
-                Alignment.Center
-            ),
-            // size = DpSize(950.dp, 580.dp)
+            position = WindowPosition(Alignment.Center)
         )
     ) {
-        App()
+        val darkMode = isSystemInDarkTheme()
+        MaterialTheme(colors = if (darkMode) darkColors() else lightColors()) {
+            Surface(color = MaterialTheme.colors.background) {
+                Navigation(Screen.LOGIN)
+            }
+        }
     }
 }

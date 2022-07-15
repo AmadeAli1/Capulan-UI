@@ -10,7 +10,7 @@ import repository.UserRepository
 import service.Message
 
 class UserViewModel(
-    private val userRepository: UserRepository = UserRepository()
+    private val userRepository: UserRepository = UserRepository
 ) {
     private var codigo by mutableStateOf("")
     private var password by mutableStateOf("")
@@ -42,7 +42,7 @@ class UserViewModel(
     }
 
     suspend fun login() {
-        progress.value= Progress(true)
+        progress.value = Progress(true)
         validateCodigo()
         validatePassword()
         delay(600)
@@ -52,7 +52,7 @@ class UserViewModel(
             val login = userRepository.login(codigo = codigo.toInt(), senha = password)
             if (login.isSuccessful) {
                 userRepository.currentUser(login.body()!!)
-                progress.value= Progress(status = false, result = true)
+                progress.value = Progress(status = false, result = true)
             } else {
                 val mapper = jacksonObjectMapper()
                 val error = login.errorBody()!!.string()
