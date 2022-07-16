@@ -8,12 +8,12 @@
       <jdbc-driver>java.sql.Driver</jdbc-driver>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@192.168.1.134" uuid="83c6f096-a246-464c-a0e2-85d16b7b8483">
+    <data-source source="LOCAL" name="@192.168.1.143" uuid="02df61d1-55ba-405d-8f51-8f4a838962d3">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@192.168.1.134:1521:XE</jdbc-url>
+      <jdbc-url>jdbc:oracle:thin:@192.168.1.143:1521:XE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
