@@ -52,6 +52,7 @@ class UserViewModel(
             val login = userRepository.login(codigo = codigo.toInt(), senha = password)
             if (login.isSuccessful) {
                 userRepository.currentUser(login.body()!!)
+                println(login.body())
                 progress.value = Progress(status = false, result = true)
             } else {
                 val mapper = jacksonObjectMapper()

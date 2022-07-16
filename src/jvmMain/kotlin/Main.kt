@@ -14,8 +14,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         resizable = false,
         state = WindowState(
-            placement = WindowPlacement.Maximized,
-            position = WindowPosition(Alignment.Center)
+            placement = WindowPlacement.Maximized, position = WindowPosition(Alignment.Center)
         )
     ) {
         val darkMode = isSystemInDarkTheme()
