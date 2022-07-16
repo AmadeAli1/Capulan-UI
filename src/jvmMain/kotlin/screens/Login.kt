@@ -86,7 +86,7 @@ fun LoginScreen(viewModel: UserViewModel = UserViewModel(), navigate: MutableSta
 
                     LaunchedEffect(key1 = progress.result) {
                         if (progress.result) {
-                            navigate.value = Screen.MENU
+                            navigate.value = Screen.HOME
                         }
                     }
                 }

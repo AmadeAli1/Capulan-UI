@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import repository.UserRepository
 import java.awt.Cursor
 
 
@@ -122,7 +123,8 @@ private fun HeaderEnd() {
 @Composable
 private fun TabList() {
     var selectedIndex by remember { mutableStateOf(0) }
-    val items = TabItem.values()
+    val items = UserRepository.currentUser!!.jobArea.tabs
+
     TabRow(selectedTabIndex = selectedIndex, tabs = {
         items.forEachIndexed { index, tabItem ->
             Tab(
@@ -134,7 +136,10 @@ private fun TabList() {
     )
 }
 
-private enum class TabItem {
+//admin all
+//gerente !=admin
+//balconista encomendas,utilizadores,produtos
+enum class TabItem {
     Admins,
     Encomendas,
     Utilizadores,

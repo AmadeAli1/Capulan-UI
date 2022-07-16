@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.delay
+import model.actores.Empregado
 import repository.UserRepository
 import service.Message
 
@@ -51,9 +52,14 @@ class UserViewModel(
             resetValidation()
             val login = userRepository.login(codigo = codigo.toInt(), senha = password)
             if (login.isSuccessful) {
-                userRepository.currentUser(login.body()!!)
-                println(login.body())
-                progress.value = Progress(status = false, result = true)
+                if (login.body() is Empregado) {
+                    userRepository.currentUser(login.body()!!)
+                    progress.value = Progress(status = false, result = true)
+
+                } else {
+                    codigoValidationMessage = MessageValidation(mensagem = "Acesso restrito", status = false)
+                    progress.value = Progress(status = false, result = false)
+                }
             } else {
                 val mapper = jacksonObjectMapper()
                 val error = login.errorBody()!!.string()

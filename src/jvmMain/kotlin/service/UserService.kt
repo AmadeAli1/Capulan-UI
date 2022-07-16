@@ -1,9 +1,9 @@
 package service
 
-import model.actores.Cliente
-import model.actores.Empregado
 import com.isctem.capulan.request.ClienteBody
 import com.isctem.capulan.request.EmpregadoBody
+import model.actores.Cliente
+import model.actores.Empregado
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,8 +18,8 @@ interface UserService {
     @POST("user/empregado")
     suspend fun register(@Body empregadoBody: EmpregadoBody): Response<Empregado>
 
-    @GET("user/login")
-    suspend fun login(@Query("codigo") codigo: Int, @Query("senha") senha: String): Response<Any>
+    @GET("user/login/work")
+    suspend fun login(@Query("codigo") codigo: Int, @Query("senha") senha: String): Response<Empregado>
 
     @GET("user/cliente")
     suspend fun findAllClients(): Response<List<Cliente>>
