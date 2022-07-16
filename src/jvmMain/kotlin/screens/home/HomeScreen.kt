@@ -1,4 +1,4 @@
-package screens
+package screens.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -31,6 +31,12 @@ fun HomeScreen() {
         Header()
         Spacer(modifier = Modifier.height(32.dp))
         Divider()
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth(0.45f)) {
+                TabList()
+            }
+        }
     }
 }
 
@@ -111,4 +117,28 @@ private fun HeaderEnd() {
     Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null, modifier = Modifier.size(40.dp))
     Spacer(modifier = Modifier.width(10.dp))
     Text(text = "Amade Ali")
+}
+
+@Composable
+private fun TabList() {
+    var selectedIndex by remember { mutableStateOf(0) }
+    val items = TabItem.values()
+    TabRow(selectedTabIndex = selectedIndex, tabs = {
+        items.forEachIndexed { index, tabItem ->
+            Tab(
+                text = { Text(text = tabItem.name) },
+                selected = selectedIndex == index,
+                onClick = { selectedIndex = index })
+        }
+    }, divider = {}
+    )
+}
+
+private enum class TabItem {
+    Admins,
+    Encomendas,
+    Utilizadores,
+    Produtos,
+    Stocks,
+    Fornecedores
 }
