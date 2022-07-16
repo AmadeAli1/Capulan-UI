@@ -1,9 +1,6 @@
-package com.isctem.capulan.request
-
-import model.actores.Cliente
-import model.actores.User
+package model.actores.formulario
 
 data class ClienteBody(
-    val cliente: Cliente,
-    val user: User
+    val cliente: ClienteForm,
+    val user: UserForm
 )

@@ -2,7 +2,6 @@ package screens.home
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,7 +10,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Card
 import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -90,7 +88,7 @@ private fun TableItem(cliente: Cliente) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val fullname = cliente.user.nome.split(" ")
+                val fullname = cliente.nome.split(" ")
                 Text(text = "${cliente.id}", modifier = Modifier.weight(0.5f))
                 Text(text = fullname[0], modifier = Modifier.weight(2f))
                 Text(text = fullname[1], modifier = Modifier.weight(2f))
@@ -100,7 +98,7 @@ private fun TableItem(cliente: Cliente) {
                     color = Color.Blue.copy(alpha = 0.8f)
                 )
                 Text(text = cliente.cidade, modifier = Modifier.weight(1f))
-                Text(text = cliente.user.userType.name, modifier = Modifier.weight(1.5f))
+                Text(text = cliente.userType.name, modifier = Modifier.weight(1.5f))
             }
         }
     }

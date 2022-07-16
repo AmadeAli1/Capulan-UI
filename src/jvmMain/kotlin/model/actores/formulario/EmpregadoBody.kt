@@ -1,9 +1,6 @@
-package com.isctem.capulan.request
-
-import model.actores.Empregado
-import model.actores.User
+package model.actores.formulario
 
 data class EmpregadoBody(
-    val user: User,
-    val empregado: Empregado
+    val user: UserForm,
+    val empregado: EmpregadoForm
 )

@@ -1,7 +1,7 @@
 package service
 
-import com.isctem.capulan.request.ClienteBody
-import com.isctem.capulan.request.EmpregadoBody
+import model.actores.formulario.ClienteBody
+import model.actores.formulario.EmpregadoBody
 import model.actores.Cliente
 import model.actores.Empregado
 import retrofit2.Response

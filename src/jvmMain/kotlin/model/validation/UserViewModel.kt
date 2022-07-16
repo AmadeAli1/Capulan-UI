@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.delay
-import model.actores.Empregado
 import repository.UserRepository
 import service.Message
 
@@ -32,7 +31,7 @@ class UserViewModel(
 
     private fun validateCodigo() {
         codigoValidationMessage = if (codigo.isEmpty()) {
-            MessageValidation("Empty")
+            MessageValidation("Must no be empty", status = false)
         } else if (codigo.isBlank()) {
             MessageValidation(mensagem = "Must not be blank", status = false)
         } else if (!codigo.contains(Regex("^[0-9]*$"))) {
@@ -43,23 +42,16 @@ class UserViewModel(
     }
 
     suspend fun login() {
-        progress.value = Progress(true)
         validateCodigo()
         validatePassword()
-        delay(600)
-        val codigoEmpty = codigoValidationMessage.mensagem != "Empty"
-        if (codigoValidationMessage.status.and(passwordValidationMessage.status).and(codigoEmpty)) {
+        if (codigoValidationMessage.status.and(passwordValidationMessage.status)) {
             resetValidation()
+            progress.value = Progress(true)
+            delay(600)
             val login = userRepository.login(codigo = codigo.toInt(), senha = password)
             if (login.isSuccessful) {
-                if (login.body() is Empregado) {
-                    userRepository.currentUser(login.body()!!)
-                    progress.value = Progress(status = false, result = true)
-
-                } else {
-                    codigoValidationMessage = MessageValidation(mensagem = "Acesso restrito", status = false)
-                    progress.value = Progress(status = false, result = false)
-                }
+                userRepository.currentUser(login.body()!!)
+                progress.value = Progress(status = false, result = true)
             } else {
                 val mapper = jacksonObjectMapper()
                 val error = login.errorBody()!!.string()
@@ -79,7 +71,6 @@ class UserViewModel(
             }
         }
     }
-
 
     private fun resetValidation() {
         codigoValidationMessage = MessageValidation()
