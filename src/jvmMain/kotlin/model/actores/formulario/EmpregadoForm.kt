@@ -4,8 +4,8 @@ import model.actores.UserType
 
 data class EmpregadoForm(
     var id: Int = 0,
-    val salario: Float,
-    val jobArea: UserType,
-    var idUser: Int,
+    var salario: Float? = null,
+    var jobArea: UserType? = null,
+    var idUser: Int? = null,
     var user: UserForm? = null
 )

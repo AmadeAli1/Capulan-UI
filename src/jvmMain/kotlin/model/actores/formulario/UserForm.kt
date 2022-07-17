@@ -5,9 +5,10 @@ import model.actores.UserType
 
 data class UserForm(
     var id: Int = 0,
-    val nome: String, val bi: String,
-    val userType: UserType,
-    val senha: String,
-    val sexo: Genre,
-    val idTerminal: Int
+    var nome: String? = null,
+    var bi: String? = null,
+    var userType: UserType? = null,
+    var senha: String? = null,
+    var sexo: Genre? = null,
+    var idTerminal: Int? = null
 )

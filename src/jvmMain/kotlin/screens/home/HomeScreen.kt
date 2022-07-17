@@ -19,12 +19,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import helpers.TabItem
+import helpers.TabList
 import repository.UserRepository
+import helpers.TabItem.*
 import java.awt.Cursor
 
 
 @Composable
 fun HomeScreen() {
+    val items = UserRepository.currentUser!!.jobArea.tabs
+    var tabSelected by remember { mutableStateOf(items[0]) }
+
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(vertical = 24.dp, horizontal = 32.dp)
@@ -35,14 +41,33 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth(0.45f)) {
-                TabList()
+                TabList(
+                    onSelect = { tabSelected = it as TabItem },
+                    tabItems = items
+                )
+            }
+            when (tabSelected) {
+                Admins -> AdminSection()
+                Encomendas -> {
+
+                }
+                Utilizadores -> UsuarioSection()
+                Produtos -> {
+
+                }
+                Stocks -> {
+
+                }
+                else -> {
+
+                }
             }
         }
     }
 }
 
 @Composable
-fun SearchBar(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
+private fun SearchBar(modifier: Modifier = Modifier, onSearch: (String) -> Unit) {
     var search by remember { mutableStateOf("") }
     TextField(
         value = search,
@@ -120,30 +145,3 @@ private fun HeaderEnd() {
     Text(text = "Amade Ali")
 }
 
-@Composable
-private fun TabList() {
-    var selectedIndex by remember { mutableStateOf(0) }
-    val items = UserRepository.currentUser!!.jobArea.tabs
-
-    TabRow(selectedTabIndex = selectedIndex, tabs = {
-        items.forEachIndexed { index, tabItem ->
-            Tab(
-                text = { Text(text = tabItem.name) },
-                selected = selectedIndex == index,
-                onClick = { selectedIndex = index })
-        }
-    }, divider = {}
-    )
-}
-
-//admin all
-//gerente !=admin
-//balconista encomendas,utilizadores,produtos
-enum class TabItem {
-    Admins,
-    Encomendas,
-    Utilizadores,
-    Produtos,
-    Stocks,
-    Fornecedores
-}

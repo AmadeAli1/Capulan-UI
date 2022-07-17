@@ -17,7 +17,6 @@ object UserRepository {
         currentUser = user
     }
 
-
     suspend fun login(codigo: Int, senha: String) = service.login(codigo, senha)
 
     suspend fun findAllClientes(): List<Cliente> {
@@ -27,4 +26,13 @@ object UserRepository {
         }
         return emptyList()
     }
+
+    suspend fun findAllEmpregados(): List<Empregado> {
+        val allClients = service.findAllEmpregados()
+        if (allClients.isSuccessful) {
+            return allClients.body()!!
+        }
+        return emptyList()
+    }
+
 }
