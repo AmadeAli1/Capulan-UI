@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import screens.LoginScreen
 import screens.home.HomeScreen
+import screens.home.ShowFormCliente
 
 @Composable
 fun Navigation(initScreen: Screen) {
@@ -12,7 +13,10 @@ fun Navigation(initScreen: Screen) {
 
     when (navigate.value) {
         Screen.LOGIN -> LoginScreen(navigate = navigate)
-        Screen.HOME -> HomeScreen()
+        Screen.HOME -> HomeScreen(navigate = navigate)
+        Screen.SAVECLIENTE -> ShowFormCliente(onSave = {}) {
+            navigate.value = it
+        }
     }
 
 }

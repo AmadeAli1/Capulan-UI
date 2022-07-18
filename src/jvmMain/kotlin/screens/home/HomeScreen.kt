@@ -23,11 +23,12 @@ import helpers.TabItem
 import helpers.TabList
 import repository.UserRepository
 import helpers.TabItem.*
+import navigation.Screen
 import java.awt.Cursor
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navigate: MutableState<Screen>) {
     val items = UserRepository.currentUser!!.jobArea.tabs
     var tabSelected by remember { mutableStateOf(items[0]) }
 
@@ -51,7 +52,7 @@ fun HomeScreen() {
                 Encomendas -> {
 
                 }
-                Utilizadores -> UsuarioSection()
+                Utilizadores -> UsuarioSection(navigate=navigate)
                 Produtos -> {
 
                 }
@@ -142,6 +143,6 @@ private fun HeaderEnd() {
     Spacer(modifier = Modifier.width(10.dp))
     Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null, modifier = Modifier.size(40.dp))
     Spacer(modifier = Modifier.width(10.dp))
-    Text(text = "Amade Ali")
+    Text(text = UserRepository.currentUser!!.nome)
 }
 

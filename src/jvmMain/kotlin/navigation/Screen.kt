@@ -2,5 +2,6 @@ package navigation
 
 enum class Screen {
     LOGIN,
-    HOME
+    HOME,
+    SAVECLIENTE
 }

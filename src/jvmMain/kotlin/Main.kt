@@ -9,10 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.*
 import navigation.Navigation
 import navigation.Screen
-import java.io.IOException
-import java.net.MalformedURLException
-import java.net.URL
-import java.net.URLConnection
+import screens.home.ShowFormCliente
 
 
 fun main() = application {
@@ -24,6 +21,7 @@ fun main() = application {
         )
     ) {
         val darkMode = isSystemInDarkTheme()
+
         MaterialTheme(colors = if (darkMode) darkColors() else lightColors()) {
             Surface(color = MaterialTheme.colors.background) {
                 Navigation(Screen.LOGIN)

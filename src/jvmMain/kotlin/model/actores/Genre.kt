@@ -1,6 +1,12 @@
 package model.actores
 
-enum class Genre {
+import helpers.MarkupEnum
+
+enum class Genre : MarkupEnum {
     MASCULINO,
-    FEMENINO
+    FEMENINO;
+
+    override fun getName(): String {
+        return this.name
+    }
 }
