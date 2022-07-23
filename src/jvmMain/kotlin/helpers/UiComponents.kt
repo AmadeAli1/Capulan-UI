@@ -140,6 +140,7 @@ fun CustomButton(
 
 @Composable
 fun Dropdown(
+    label: String="Genre",
     modifier: Modifier = Modifier,
     markupEnum: Array<out MarkupEnum>,
     onSelect: (MarkupEnum) -> Unit
@@ -163,7 +164,7 @@ fun Dropdown(
         ) {
             OutlinedTextField(
                 value = labeltext.getName(),
-                label = { Text(text = "Genre") },
+                label = { Text(text = label) },
                 onValueChange = {},
                 trailingIcon = {
                     IconButton(onClick = {

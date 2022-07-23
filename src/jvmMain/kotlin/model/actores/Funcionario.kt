@@ -1,6 +1,6 @@
 package model.actores
 
-data class Empregado(
+data class Funcionario(
     val nome: String,
     val bi: String,
     val userType: UserType,
@@ -8,7 +8,7 @@ data class Empregado(
     val sexo: Genre,
     val idTerminal: Int,
     val salario: Float,
-    val jobArea: UserType,
+    val jobArea: JobArea,
     var idUser: Int,
     var id: Int = 0
 )

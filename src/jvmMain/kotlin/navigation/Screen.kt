@@ -3,5 +3,7 @@ package navigation
 enum class Screen {
     LOGIN,
     HOME,
-    SAVECLIENTE
+    SAVECLIENTE,
+    SPLASHSCREEN,
+    SAVEFUNCIONARIO
 }

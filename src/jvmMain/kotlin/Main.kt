@@ -24,7 +24,7 @@ fun main() = application {
 
         MaterialTheme(colors = if (darkMode) darkColors() else lightColors()) {
             Surface(color = MaterialTheme.colors.background) {
-                Navigation(Screen.LOGIN)
+                Navigation(Screen.SPLASHSCREEN)
             }
         }
     }

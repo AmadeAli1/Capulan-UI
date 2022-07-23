@@ -1,30 +1,30 @@
 package service
 
+import model.actores.Cliente
+import model.actores.Funcionario
 import model.actores.formulario.ClienteBody
 import model.actores.formulario.EmpregadoBody
-import model.actores.Cliente
-import model.actores.Empregado
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserService {
 
     @POST("user/cliente")
-    suspend fun register(@Body clienteBody: ClienteBody): Response<Cliente>
+    suspend fun register(@Body clienteBody: ClienteBody, @Query("location") location: Int): Response<Cliente>
 
     @POST("user/empregado")
-    suspend fun register(@Body empregadoBody: EmpregadoBody): Response<Empregado>
+    suspend fun register(@Body empregadoBody: EmpregadoBody, @Query("location") location: Int?): Response<Funcionario>
 
     @GET("user/login/work")
-    suspend fun login(@Query("codigo") codigo: Int, @Query("senha") senha: String): Response<Empregado>
+    suspend fun login(@Query("codigo") codigo: Int, @Query("senha") senha: String): Response<Funcionario>
 
     @GET("user/cliente")
     suspend fun findAllClients(): Response<List<Cliente>>
 
     @GET("user/empregado")
-    suspend fun findAllEmpregados(): Response<List<Empregado>>
+    suspend fun findAllEmpregados(): Response<List<Funcionario>>
+
+    @DELETE("user/delete")
+    suspend fun delete(@Query("id") idUser: Int): Response<Boolean>
 
 }

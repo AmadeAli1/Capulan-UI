@@ -4,43 +4,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import model.actores.Genre
+import model.actores.JobArea
 import model.actores.UserType
-import model.actores.formulario.ClienteBody
-import model.actores.formulario.ClienteForm
+import model.actores.formulario.EmpregadoBody
+import model.actores.formulario.EmpregadoForm
 import model.actores.formulario.UserForm
 import repository.UserRepository
 import service.Singleton
 import service.UserService
 
-class ClienteViewModel(
+class FuncionarioViewModel(
     private val service: UserService = Singleton.SERVIDOR.create(UserService::class.java),
 ) {
-    private var cliente by mutableStateOf(ClienteForm())
+    private var funcionario by mutableStateOf(EmpregadoForm())
     private var user by mutableStateOf(UserForm())
     private val validate by mutableStateOf(Validate())
-    private var lastname by mutableStateOf<String?>(null)
 
     init {
-        user.userType = UserType.CLIENTE
+        user.userType = UserType.FUNCIONARIO
         user.idTerminal = UserRepository.currentUser!!.idTerminal
         user.sexo = Genre.MASCULINO
-//        cliente = ClienteForm(email = "aliamadeoiu@gmail.com", codigoPostal = "postal111", cidade = "Maputo")
-//        user = UserForm(
-//            nome = "Jose Marques",
-//            bi = "1l34567890123",
-//            senha = "jose132",
-//            userType = UserType.CLIENTE,
-//            sexo = Genre.MASCULINO,
-//            idTerminal = 1
-//        )
-
-
+        funcionario.jobArea = JobArea.BALCONISTA
     }
 
     private fun validate(): Boolean {
-        return validate.validate(cliente.cidade)
-            .validate(cliente.codigoPostal)
-            .validate(cliente.email)
+        return validate
+            .validate(funcionario.salario)
             .validate(user.bi)
             .validate(user.senha)
             .validate(user.nome)
@@ -52,21 +41,12 @@ class ClienteViewModel(
         user.nome = firstname
     }
 
-    fun onChangeCity(cityname: String) {
-        cliente.cidade = cityname
-    }
-
-    fun onChangePostalCode(postalcode: String) {
-        cliente.codigoPostal = postalcode
-    }
-
-    fun onChangeEmail(email: String) {
-        cliente.email = email
-    }
-
-
     fun onChangeBi(bi: String) {
         user.bi = bi
+    }
+
+    fun onChangeSexo(sexo: Genre) {
+        user.sexo = sexo
     }
 
     fun onChangeSenha(senha: String) {
@@ -74,14 +54,13 @@ class ClienteViewModel(
     }
 
     suspend fun save(): Boolean {
-        println(cliente)
+        println(funcionario)
         println(user)
         if (validate()) {
-            val response =
-                service.register(
-                    clienteBody = ClienteBody(cliente = cliente, user = user),
-                    location = user.idTerminal!!
-                )
+            val response = service.register(
+                empregadoBody = EmpregadoBody(empregado = funcionario, user = user),
+                location = user.idTerminal
+            )
             return if (response.isSuccessful) {
                 println("sucesso")
                 true
@@ -95,8 +74,12 @@ class ClienteViewModel(
         return false
     }
 
-    fun onChangeSexo(genre: Genre) {
-        user.sexo = genre
+    fun onChangeJobArea(jobArea: JobArea) {
+        funcionario.jobArea = jobArea
+    }
+
+    fun onChangeSalario(it: String) {
+        funcionario.salario = it.toFloat()
     }
 
 

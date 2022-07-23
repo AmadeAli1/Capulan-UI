@@ -25,14 +25,11 @@ import androidx.compose.ui.unit.sp
 import helpers.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import model.actores.Cliente
-import model.actores.Empregado
-import model.actores.Genre
-import model.actores.UserType
-import model.location.Region
+import model.actores.*
 import navigation.Screen
 import repository.UserRepository
 import screens.viewmodels.ClienteViewModel
+import screens.viewmodels.FuncionarioViewModel
 
 @Composable
 @Preview
@@ -55,7 +52,7 @@ private fun ClienteTableHeader() {
             Text(text = "First Name", modifier = Modifier.weight(2f))
             Text(text = "Last Name", modifier = Modifier.weight(2f))
             Text(text = "Email", modifier = Modifier.weight(2f))
-            Text(text = "Regiao", modifier = Modifier.weight(0.5f))
+            Text(text = "Cidade", modifier = Modifier.weight(0.5f))
             Text(text = "Type", modifier = Modifier.weight(0.5f))
             Spacer(modifier = Modifier.weight(0.2f))
             Spacer(modifier = Modifier.weight(0.2f))
@@ -92,7 +89,12 @@ private fun Container(navigate: MutableState<Screen>) {
                 }
             }
             Button(onClick = {
-                navigate.value = Screen.SAVECLIENTE
+
+                if (currentView == UserType.CLIENTE) {
+                    navigate.value = Screen.SAVECLIENTE
+                } else {
+                    navigate.value = Screen.SAVEFUNCIONARIO
+                }
             }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
                 Text(text = if (currentView == UserType.CLIENTE) "Cliente" else "Funcionario")
@@ -110,7 +112,7 @@ private fun Container(navigate: MutableState<Screen>) {
 
 @Composable
 private fun ShowEmpregados() {
-    val funcionarios = mutableStateListOf<Empregado>()
+    val funcionarios = mutableStateListOf<Funcionario>()
 
     LaunchedEffect(key1 = Unit) {
         val get = async {
@@ -125,7 +127,9 @@ private fun ShowEmpregados() {
         ScrollableLazylist {
             LazyColumn(state = it, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(items = funcionarios) { item ->
-                    TableItemEmpregado(item)
+                    TableItemEmpregado(item, onDelete = { delete ->
+                        funcionarios.remove(delete)
+                    })
                 }
             }
         }
@@ -150,7 +154,9 @@ private fun ShowClientes() {
         ScrollableLazylist {
             LazyColumn(state = it, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(items = clientes) { item ->
-                    TableItemCliente(item)
+                    TableItemCliente(item, onDelete = { delete ->
+                        clientes.remove(delete)
+                    })
                 }
             }
         }
@@ -162,8 +168,7 @@ private fun ShowClientes() {
 @Composable
 fun ShowFormCliente(
     viewModel: ClienteViewModel = ClienteViewModel(),
-    onSave: (Boolean) -> Unit,
-    onBack: (Screen) -> Unit
+    onBack: (Screen) -> Unit,
 ) {
     val focus = LocalFocusManager.current
     val scope = rememberCoroutineScope()
@@ -197,18 +202,15 @@ fun ShowFormCliente(
             Surface(
                 elevation = 3.dp,
                 shape = RoundedCornerShape(2),
-                modifier = Modifier.width(630.dp).height(500.dp).align(Alignment.Center)
+                modifier = Modifier.width(630.dp).height(450.dp).align(Alignment.Center)
             ) {
                 Column(
-                    modifier = Modifier.width(630.dp).height(500.dp).padding(32.dp),
+                    modifier = Modifier.width(630.dp).height(450.dp).padding(32.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     InputText(modifier = Modifier.fillMaxWidth(),
-                        label = "Firstname",
+                        label = "Name",
                         onValueChange = { viewModel.onChangeFirstname(it) })
-                    InputText(modifier = Modifier.fillMaxWidth(),
-                        label = "LastName",
-                        onValueChange = { viewModel.onChangeLastname(it) })
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         InputText(modifier = Modifier, label = "Email", onValueChange = { viewModel.onChangeEmail(it) })
@@ -247,8 +249,112 @@ fun ShowFormCliente(
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(onClick = {
                         scope.launch {
-                            viewModel.save()
-                            onSave(false)
+                            val save = viewModel.save()
+                            if (save) {
+                                onBack(Screen.HOME)
+                            }
+                        }
+                    }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        Text(text = "Gravar")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(imageVector = Icons.Default.Save, contentDescription = null)
+                    }
+                }
+            }
+
+
+        }
+    }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ShowFormFuncionario(
+    viewModel: FuncionarioViewModel = FuncionarioViewModel(),
+    onBack: (Screen) -> Unit,
+) {
+    val focus = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    Column(modifier = Modifier.fillMaxSize()) {
+
+        Box(modifier = Modifier.fillMaxSize().mouseClickable(enabled = true) {
+            focus.clearFocus()
+        }) {
+
+            IconButton(
+                onClick = { onBack(Screen.HOME) },
+                modifier = Modifier.size(80.dp).align(Alignment.TopStart).padding(start = 32.dp)
+            ) {
+                Icon(imageVector = Icons.Default.ArrowBack, null)
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth().align(alignment = Alignment.TopCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = "Funcionario information",
+                    style = MaterialTheme.typography.h4,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Monospace
+                )
+
+            }
+
+            Surface(
+                elevation = 3.dp,
+                shape = RoundedCornerShape(2),
+                modifier = Modifier.width(630.dp).height(450.dp).align(Alignment.Center)
+            ) {
+                Column(
+                    modifier = Modifier.width(630.dp).height(450.dp).padding(32.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    InputText(modifier = Modifier.fillMaxWidth(),
+                        label = "Name",
+                        onValueChange = { viewModel.onChangeFirstname(it) })
+
+                    InputSenha(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = "Senha",
+                        onValueChange = { viewModel.onChangeSenha(it) }
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Dropdown(markupEnum = Genre.values()) {
+                            viewModel.onChangeSexo(it as Genre)
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Dropdown(label = "JobArea", markupEnum = JobArea.values()) {
+                            viewModel.onChangeJobArea(it as JobArea)
+                        }
+
+                    }
+
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        InputText(modifier = Modifier, label = "BI Code", onValueChange = { viewModel.onChangeBi(it) })
+                        InputText(
+                            modifier = Modifier,
+                            label = "Salario",
+                            onValueChange = { viewModel.onChangeSalario(it) })
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = {
+                        scope.launch {
+                            val save = viewModel.save()
+                            if (save) {
+                                onBack(Screen.HOME)
+                            }
                         }
                     }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
                         Text(text = "Gravar")
@@ -292,7 +398,8 @@ private fun EmpregadoTableHeader() {
 }
 
 @Composable
-private fun TableItemEmpregado(item: Empregado) {
+private fun TableItemEmpregado(item: Funcionario, onDelete: (Funcionario) -> Unit) {
+    val scope = rememberCoroutineScope()
     Card(modifier = Modifier.fillMaxWidth().height(50.dp).padding(bottom = 2.dp, top = 2.dp), elevation = 2.dp) {
         ProvideTextStyle(value = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.W100)) {
             Row(
@@ -303,11 +410,18 @@ private fun TableItemEmpregado(item: Empregado) {
                 val fullname = item.nome.split(" ")
                 Text(text = "${item.id}", modifier = Modifier.weight(0.5f))
                 Text(text = fullname[0], modifier = Modifier.weight(2f))
-                Text(text = fullname[1], modifier = Modifier.weight(2f))
+                Text(text = if (fullname.size > 1) fullname[fullname.size - 1] else "", modifier = Modifier.weight(2f))
                 Text(text = item.jobArea.name, modifier = Modifier.weight(2f))
                 Text(text = "${item.salario} MT", modifier = Modifier.weight(1f))
 
-                IconButton(onClick = {}, modifier = Modifier.weight(0.2f)) {
+                IconButton(onClick = {
+                    scope.launch {
+                        val delete = UserRepository.delete(idUser = item.idUser)
+                        if (delete) {
+                            onDelete(item)
+                        }
+                    }
+                }, modifier = Modifier.weight(0.2f)) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = null)
                 }
 
@@ -322,7 +436,7 @@ private fun TableItemEmpregado(item: Empregado) {
 
 @Composable
 private fun ChooseUser(onSelected: (UserType) -> Unit) {
-    if (UserRepository.currentUser!!.jobArea != UserType.FUNCIONARIO) {
+    if (UserRepository.currentUser!!.jobArea != JobArea.BALCONISTA) {
         TabList(onSelect = {
             onSelected(it as UserType)
         }, tabItems = arrayOf(UserType.CLIENTE, UserType.FUNCIONARIO))
@@ -334,7 +448,9 @@ private fun ChooseUser(onSelected: (UserType) -> Unit) {
 }
 
 @Composable
-private fun TableItemCliente(cliente: Cliente) {
+private fun TableItemCliente(cliente: Cliente, onDelete: (Cliente) -> Unit) {
+    val scope = rememberCoroutineScope()
+
     Card(modifier = Modifier.fillMaxWidth().height(50.dp).padding(bottom = 2.dp, top = 2.dp), elevation = 2.dp) {
         ProvideTextStyle(value = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.W100)) {
             Row(
@@ -345,14 +461,21 @@ private fun TableItemCliente(cliente: Cliente) {
                 val fullname = cliente.nome.split(" ")
                 Text(text = "${cliente.id}", modifier = Modifier.weight(0.5f))
                 Text(text = fullname[0], modifier = Modifier.weight(2f))
-                Text(text = fullname[1], modifier = Modifier.weight(2f))
+                Text(text = if (fullname.size > 1) fullname[fullname.size - 1] else "", modifier = Modifier.weight(2f))
                 Text(
                     text = cliente.email, modifier = Modifier.weight(2f), color = Color.Blue.copy(alpha = 0.8f)
                 )
                 Text(text = cliente.cidade, modifier = Modifier.weight(0.5f))
                 Text(text = cliente.userType.name, modifier = Modifier.weight(0.5f))
 
-                IconButton(onClick = {}, modifier = Modifier.weight(0.2f)) {
+                IconButton(onClick = {
+                    scope.launch {
+                        val delete = UserRepository.delete(idUser = cliente.idUser)
+                        if (delete) {
+                            onDelete(cliente)
+                        }
+                    }
+                }, modifier = Modifier.weight(0.2f)) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = null)
                 }
 
