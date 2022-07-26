@@ -59,6 +59,9 @@ fun HomeScreen(navigate: MutableState<Screen>) {
                 Stocks -> {
 
                 }
+                Encomendas ->{
+
+                }
                 else -> {
 
                 }

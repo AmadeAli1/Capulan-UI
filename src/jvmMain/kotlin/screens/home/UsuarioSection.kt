@@ -370,10 +370,6 @@ fun ShowFormFuncionario(
 
 }
 
-@Composable
-private fun Padding(all: Dp, content: @Composable (Modifier) -> Unit) {
-    content(Modifier.padding(all))
-}
 
 @Composable
 private fun EmpregadoTableHeader() {
