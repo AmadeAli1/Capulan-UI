@@ -60,7 +60,7 @@ fun HomeScreen(navigate: MutableState<Screen>) {
 
                 }
                 Encomendas ->{
-
+                    EncomendaSection(navigate)
                 }
                 else -> {
 

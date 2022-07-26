@@ -4,7 +4,7 @@ import helpers.MarkupEnum
 
 enum class Genre : MarkupEnum {
     MASCULINO,
-    FEMENINO;
+    FEMININO;
 
     override fun getName(): String {
         return this.name
