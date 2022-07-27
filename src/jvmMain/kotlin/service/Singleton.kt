@@ -26,18 +26,4 @@ object Singleton {
         SERVIDOR = retrofit
     }
 
-    fun netIsAvailable(): Boolean {
-        return try {
-            val url = URL("http://localhost:8080")
-            val conn: URLConnection = url.openConnection()
-            conn.connect()
-            conn.getInputStream().close()
-            true
-        } catch (e: MalformedURLException) {
-            throw RuntimeException(e)
-        } catch (e: IOException) {
-            false
-        }
-    }
-
 }
