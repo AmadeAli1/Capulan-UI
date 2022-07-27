@@ -101,7 +101,7 @@ fun InputText(
                 onValueChange(text)
             },
             label = {
-                Text(text = label)
+                Text(text = label, color = Color.White)
             },
             trailingIcon = {
                 if (isError != null) {

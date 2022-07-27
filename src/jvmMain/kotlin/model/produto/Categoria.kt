@@ -1,7 +1,7 @@
 package model.produto
 
 data class Categoria(
-    val name: CategoriaType,
-    val type: String,
+    val categoriaType: CategoriaType,
+    val nome: String,
     var id: Int = 0
 )

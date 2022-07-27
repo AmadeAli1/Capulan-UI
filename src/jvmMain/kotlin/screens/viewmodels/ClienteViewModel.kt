@@ -99,14 +99,4 @@ class ClienteViewModel(
         user.sexo = genre
     }
 
-
-    private class Validate {
-        var isValid = true
-        fun <T> validate(field: T?): Validate {
-            if (isValid) {
-                isValid = field != null
-            }
-            return this
-        }
-    }
 }

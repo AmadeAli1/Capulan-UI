@@ -1,9 +1,15 @@
 package model.produto
 
-enum class CategoriaType {
+import helpers.MarkupEnum
+
+enum class CategoriaType : MarkupEnum {
     CAMISA,
     BERMUDA,
     CHAPEU,
     VESTIDO,
-    SAPATO
+    SAPATO;
+
+    override fun getName(): String {
+        return this.name
+    }
 }

@@ -8,6 +8,7 @@ import screens.SplashScreen
 import screens.home.HomeScreen
 import screens.home.ShowFormCliente
 import screens.home.ShowFormFuncionario
+import screens.home.StockForm
 
 @Composable
 fun Navigation(initScreen: Screen) {
@@ -19,14 +20,14 @@ fun Navigation(initScreen: Screen) {
         Screen.SAVECLIENTE -> ShowFormCliente(onBack = {
             navigate.value = it
         })
-        Screen.SPLASHSCREEN,
-        -> SplashScreen(navigate = navigate)
-        Screen.SAVEFUNCIONARIO -> ShowFormFuncionario {
-            navigate.value = it
+        Screen.SPLASHSCREEN -> {
+            SplashScreen(navigate = navigate)
         }
+        Screen.SAVEFUNCIONARIO -> ShowFormFuncionario(onBack = {
+            navigate.value = it
+        })
         Screen.SAVESTOCK -> {
-
+            StockForm(onBack = { navigate.value = it })
         }
     }
-
 }

@@ -54,7 +54,7 @@ fun HomeScreen(navigate: MutableState<Screen>) {
                     ProdutoSection(navigate = navigate)
                 }
                 Stocks -> {
-
+                    StockSection(navigate = navigate)
                 }
                 Encomendas -> {
                     EncomendaSection(navigate)

@@ -10,6 +10,7 @@ import androidx.compose.ui.window.*
 import navigation.Navigation
 import navigation.Screen
 import screens.home.ShowFormCliente
+import screens.home.StockForm
 
 
 fun main() = application {

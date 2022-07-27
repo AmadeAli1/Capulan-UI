@@ -300,7 +300,6 @@ fun ShowFormFuncionario(
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily.Monospace
                 )
-
             }
 
             Surface(

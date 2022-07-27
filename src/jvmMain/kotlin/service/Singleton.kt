@@ -14,6 +14,7 @@ object Singleton {
         for (location in Server.values()) {
 
             try {
+                println("Test server $location ...")
                 val conn: Connection? = DriverManager.getConnection(
                     location.host, location.username, location.password
                 )

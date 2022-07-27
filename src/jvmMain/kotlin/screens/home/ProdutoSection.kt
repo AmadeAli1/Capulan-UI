@@ -3,9 +3,9 @@ package screens.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.Card
+import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +39,7 @@ private fun ProdutoList(produtoRepository: ProdutoRepository = ProdutoRepository
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        TableProdutoHeader()
+        TableStockHeader()
         Spacer(modifier = Modifier.height(8.dp))
         ScrollableLazylist {
             LazyColumn(state = it, verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -53,7 +53,7 @@ private fun ProdutoList(produtoRepository: ProdutoRepository = ProdutoRepository
 }
 
 @Composable
-private fun TableProdutoHeader() {
+private fun TableStockHeader() {
     ProvideTextStyle(
         value = TextStyle(
             fontWeight = FontWeight.W600,
@@ -85,10 +85,10 @@ private fun TabelaItemProduto(item: Produto) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "${item.id}", modifier = Modifier.weight(1f))
-                Text(text = item.nome, modifier = Modifier.weight(1f))
+                Text(text = item.nome!!, modifier = Modifier.weight(1f))
                 Text(text = item.preco.toString(), modifier = Modifier.weight(1f))
                 Text(text = item.quantidade.toString(), modifier = Modifier.weight(1f))//TODO() estado
-                Text(text = item.categoriaType.name, modifier = Modifier.weight(0.5f))
+                Text(text = item.categoriaType!!.name, modifier = Modifier.weight(0.5f))
             }
         }
     }
