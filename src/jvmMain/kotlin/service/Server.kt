@@ -6,7 +6,7 @@ enum class Server(
 ) {
 
     PORTUGAL(
-        host = "jdbc:oracle:thin:@192.168.1.104:1521:XE",
+        host = "jdbc:oracle:thin:@192.168.1.177:1521:XE",
         username = "Portugal",
         password = "portugal",
         server = "http://localhost:8080/api/mz/"

@@ -1,9 +1,6 @@
 package repository
 
-import model.produto.Categoria
-import model.produto.Encomenda
-import model.produto.Produto
-import model.produto.Stock
+import model.produto.*
 import service.ProdutoService
 import service.Singleton
 
@@ -52,6 +49,18 @@ class ProdutoRepository(
 
     suspend fun findAllStocks(): List<Stock> {
         val response = servise.findAllStocks()
+        if (response.isSuccessful) {
+            println("Sucesso!")
+            println(response.body()?.size)
+            return response.body()!!
+        } else {
+            println(response.message())
+        }
+        return emptyList()
+    }
+
+    suspend fun findAllFornecedores(): List<Fornecedor> {
+        val response = servise.findAllFornecedores()
         if (response.isSuccessful) {
             println("Sucesso!")
             println(response.body()?.size)

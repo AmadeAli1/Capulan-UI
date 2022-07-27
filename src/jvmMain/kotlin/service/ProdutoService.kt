@@ -21,6 +21,22 @@ interface ProdutoService {
     @GET("produto/stock")
     suspend fun findAllStocks(): Response<List<Stock>>
 
+
+    @GET("produto/encomenda")
+    suspend fun save(
+        @Body encomenda: Encomenda,
+        @Query("produto") idProduto: Int,
+        @Query("funcionaro") idFuncionario: Int,
+        @Query("usuario") idUsuario: Int,
+        @Query("terminal") idTerminal: Int,
+    ): Response<Boolean>
+
+    @GET("produto/fornecedor")
+    suspend fun findAllFornecedores(): Response<List<Fornecedor>>
+
+    @POST("produto/fornecedor")
+    suspend fun save(@Body fornecedor: Fornecedor): Response<Boolean>
+
     @POST("produto/save")
     suspend fun save(
         @Body stock: StockForm,

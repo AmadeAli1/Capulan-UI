@@ -79,7 +79,7 @@ private fun TableStockHeader() {
             fontWeight = FontWeight.W600,
             fontSize = 18.sp,
             fontFamily = FontFamily.Monospace
-        )
+        )//Slec * from Cliente@Marcio
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),

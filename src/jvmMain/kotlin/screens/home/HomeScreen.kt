@@ -29,7 +29,7 @@ import java.awt.Cursor
 
 @Composable
 fun HomeScreen(navigate: MutableState<Screen>) {
-    val items = UserRepository.currentUser!!.jobArea.tabs
+    val items = UserRepository.currentUser!!.jobArea.tabs.filter { it.getName() != Admins.name }.toTypedArray()
     var tabSelected by remember { mutableStateOf(items[0]) }
 
     Column(
@@ -48,7 +48,6 @@ fun HomeScreen(navigate: MutableState<Screen>) {
                 )
             }
             when (tabSelected) {
-                Admins -> AdminSection()
                 Utilizadores -> UsuarioSection(navigate = navigate)
                 Produtos -> {
                     ProdutoSection(navigate = navigate)
@@ -59,8 +58,8 @@ fun HomeScreen(navigate: MutableState<Screen>) {
                 Encomendas -> {
                     EncomendaSection(navigate)
                 }
-                else -> {
-
+                Fornecedores -> {
+                    FornecedorSection(navigate = navigate)
                 }
             }
         }

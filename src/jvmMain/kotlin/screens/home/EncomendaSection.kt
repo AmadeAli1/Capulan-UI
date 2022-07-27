@@ -58,7 +58,6 @@ private fun TableEncomendaHeader() {
             Text(text = "price", modifier = Modifier.weight(0.5f))
             Text(text = "Date", modifier = Modifier.weight(0.5f))
             Text(text = "Quantidade", modifier = Modifier.weight(0.5f))
-            Text(text = "Destino", modifier = Modifier.weight(0.5f))
         }
     }
 }
@@ -105,7 +104,6 @@ private fun TableItemEncomenda(item: Encomenda) {
                 Text(text = item.preco.toString(), modifier = Modifier.weight(0.5f))
                 Text(text = "${item.date}", modifier = Modifier.weight(0.5f))
                 Text(text = item.quantidade.toString(), modifier = Modifier.weight(0.5f))
-                Text(text = "Maputo", modifier = Modifier.weight(0.5f))
             }
         }
     }

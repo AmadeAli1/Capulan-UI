@@ -5,10 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import screens.LoginScreen
 import screens.SplashScreen
-import screens.home.HomeScreen
-import screens.home.ShowFormCliente
-import screens.home.ShowFormFuncionario
-import screens.home.StockForm
+import screens.home.*
 
 @Composable
 fun Navigation(initScreen: Screen) {
@@ -28,6 +25,9 @@ fun Navigation(initScreen: Screen) {
         })
         Screen.SAVESTOCK -> {
             StockForm(onBack = { navigate.value = it })
+        }
+        Screen.SAVEFORNECEDOR -> {
+            FornecedorForm(onBack = { navigate.value = it })
         }
     }
 }
