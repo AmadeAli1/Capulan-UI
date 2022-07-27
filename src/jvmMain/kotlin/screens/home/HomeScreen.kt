@@ -20,10 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import helpers.TabItem
-import helpers.TabList
-import repository.UserRepository
 import helpers.TabItem.*
+import helpers.TabList
 import navigation.Screen
+import repository.UserRepository
 import java.awt.Cursor
 
 
@@ -49,17 +49,14 @@ fun HomeScreen(navigate: MutableState<Screen>) {
             }
             when (tabSelected) {
                 Admins -> AdminSection()
-                Encomendas -> {
-
-                }
-                Utilizadores -> UsuarioSection(navigate=navigate)
+                Utilizadores -> UsuarioSection(navigate = navigate)
                 Produtos -> {
-
+                    ProdutoSection(navigate = navigate)
                 }
                 Stocks -> {
 
                 }
-                Encomendas ->{
+                Encomendas -> {
                     EncomendaSection(navigate)
                 }
                 else -> {

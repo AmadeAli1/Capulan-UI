@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.filled.LocalShipping
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +25,15 @@ import repository.ProdutoRepository
 @Preview
 fun EncomendaSection(navigate: MutableState<Screen>) {
     Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Button(onClick = {
+
+            }) {
+                Icon(imageVector = Icons.Default.LocalShipping, contentDescription = null)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "Encomenda")
+            }
+        }
         EncomendaList()
     }
 }
@@ -43,13 +52,13 @@ private fun TableEncomendaHeader() {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = "Encomenda ID", modifier = Modifier.weight(1f))
-            Text(text = "Client Name", modifier = Modifier.weight(2f))
-            Text(text = "Product", modifier = Modifier.weight(2f))
-            Text(text = "State", modifier = Modifier.weight(1f))
+            Text(text = "Client Name", modifier = Modifier.weight(1f))
+            Text(text = "Product", modifier = Modifier.weight(1f))
+            Text(text = "Estado", modifier = Modifier.weight(1f))
             Text(text = "price", modifier = Modifier.weight(0.5f))
             Text(text = "Date", modifier = Modifier.weight(0.5f))
             Text(text = "Quantidade", modifier = Modifier.weight(0.5f))
-            Spacer(modifier = Modifier.weight(0.2f))
+            Text(text = "Destino", modifier = Modifier.weight(0.5f))
         }
     }
 }
@@ -60,7 +69,7 @@ fun EncomendaList(produtoRepository: ProdutoRepository = ProdutoRepository()) {
 
     LaunchedEffect(key1 = Unit) {
         val get = async {
-            produtoRepository.findAll()
+            produtoRepository.findAllEncomendas()
         }
         encomendas.addAll(get.await())
     }
@@ -71,7 +80,7 @@ fun EncomendaList(produtoRepository: ProdutoRepository = ProdutoRepository()) {
         ScrollableLazylist {
             LazyColumn(state = it, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(items = encomendas) { item ->
-                    TableItemEncomenda(item, onDelete = {})
+                    TableItemEncomenda(item)
                 }
             }
         }
@@ -80,7 +89,7 @@ fun EncomendaList(produtoRepository: ProdutoRepository = ProdutoRepository()) {
 }
 
 @Composable
-private fun TableItemEncomenda(item: Encomenda, onDelete: (Encomenda) -> Unit) {
+private fun TableItemEncomenda(item: Encomenda) {
     val scope = rememberCoroutineScope()
     Card(modifier = Modifier.fillMaxWidth().height(50.dp).padding(bottom = 2.dp, top = 2.dp), elevation = 2.dp) {
         ProvideTextStyle(value = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.W100)) {
@@ -90,17 +99,13 @@ private fun TableItemEncomenda(item: Encomenda, onDelete: (Encomenda) -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "${item.idEncomenda}", modifier = Modifier.weight(1f))
-                Text(text = item.cliente, modifier = Modifier.weight(2f))
-                Text(text = item.nome, modifier = Modifier.weight(2f))
-                Text(text = item.estado.name, modifier = Modifier.weight(1f))
+                Text(text = item.cliente, modifier = Modifier.weight(1f))
+                Text(text = item.nome, modifier = Modifier.weight(1f))
+                Text(text = item.estado.name, modifier = Modifier.weight(1f))//TODO() estado
                 Text(text = item.preco.toString(), modifier = Modifier.weight(0.5f))
-                Text(text = item.date, modifier = Modifier.weight(0.5f))
+                Text(text = "${item.date}", modifier = Modifier.weight(0.5f))
                 Text(text = item.quantidade.toString(), modifier = Modifier.weight(0.5f))
-
-                IconButton(onClick = {}, modifier = Modifier.weight(0.2f)) {
-                    Icon(imageVector = Icons.Default.Update, contentDescription = null)
-                }
-
+                Text(text = "Maputo", modifier = Modifier.weight(0.5f))
             }
         }
     }

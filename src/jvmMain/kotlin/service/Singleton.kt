@@ -7,13 +7,14 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLConnection
+import java.sql.DriverManager
 import java.time.Duration
 
 object Singleton {
     val SERVIDOR: Retrofit
 
     init {
-        val retrofit = Retrofit.Builder().baseUrl("http://localhost:8080/api/mz/")
+        val retrofit = Retrofit.Builder().baseUrl(Server.MOZAMBIQUE.server)
             .client(
                 OkHttpClient.Builder()
                     .callTimeout(Duration.ofMinutes(3L))

@@ -30,6 +30,7 @@ kotlin {
                 implementation("com.squareup.retrofit2:retrofit:2.9.0")
                 implementation("com.squareup.retrofit2:converter-gson:2.9.0")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
+                implementation("com.vladsch.kotlin-jdbc:kotlin-jdbc:0.5.0")
             }
 
         }
