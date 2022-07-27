@@ -20,6 +20,7 @@ import kotlinx.coroutines.async
 import model.produto.Encomenda
 import navigation.Screen
 import repository.ProdutoRepository
+import screens.viewmodels.EncomendaViewModel
 
 @Composable
 @Preview
@@ -27,7 +28,7 @@ fun EncomendaSection(navigate: MutableState<Screen>) {
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Button(onClick = {
-
+                navigate.value = Screen.SAVEENCOMENDA
             }) {
                 Icon(imageVector = Icons.Default.LocalShipping, contentDescription = null)
                 Spacer(modifier = Modifier.width(10.dp))
@@ -36,6 +37,15 @@ fun EncomendaSection(navigate: MutableState<Screen>) {
         }
         EncomendaList()
     }
+}
+
+
+@Composable
+fun EncomendaForm(
+    viewModel: EncomendaViewModel = EncomendaViewModel(),
+    onBack: (Screen) -> Unit,
+) {
+
 }
 
 @Composable

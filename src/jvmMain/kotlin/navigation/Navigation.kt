@@ -29,5 +29,8 @@ fun Navigation(initScreen: Screen) {
         Screen.SAVEFORNECEDOR -> {
             FornecedorForm(onBack = { navigate.value = it })
         }
+        Screen.SAVEENCOMENDA ->{
+
+        }
     }
 }
