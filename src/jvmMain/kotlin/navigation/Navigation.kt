@@ -19,10 +19,13 @@ fun Navigation(initScreen: Screen) {
         Screen.SAVECLIENTE -> ShowFormCliente(onBack = {
             navigate.value = it
         })
-                Screen . SPLASHSCREEN
+        Screen.SPLASHSCREEN,
         -> SplashScreen(navigate = navigate)
         Screen.SAVEFUNCIONARIO -> ShowFormFuncionario {
             navigate.value = it
+        }
+        Screen.SAVESTOCK -> {
+
         }
     }
 

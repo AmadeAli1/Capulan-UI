@@ -23,15 +23,6 @@ import repository.ProdutoRepository
 @Composable
 fun ProdutoSection(navigate: MutableState<Screen>) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Button(onClick = {
-
-            }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(text = "Produto")
-            }
-        }
         ProdutoList()
     }
 }

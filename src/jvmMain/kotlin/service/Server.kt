@@ -5,7 +5,7 @@ enum class Server(
     val password: String, val server: String,
 ) {
     MOZAMBIQUE(
-        host = "jdbc:oracle:thin:@192.168.1.104:1521:XE",
+        host = "jdbc:oracle:thin:@192.168.1.107:1521:XE",
         username = "Moz",
         password = "moz",
         server = "http://localhost:8080/api/mz/"

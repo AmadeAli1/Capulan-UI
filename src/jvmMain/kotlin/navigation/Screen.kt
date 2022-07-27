@@ -5,5 +5,6 @@ enum class Screen {
     HOME,
     SAVECLIENTE,
     SPLASHSCREEN,
-    SAVEFUNCIONARIO
+    SAVEFUNCIONARIO,
+    SAVESTOCK
 }
